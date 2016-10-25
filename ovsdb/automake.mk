@@ -5,6 +5,7 @@ ovsdb_libovsdb_la_LDFLAGS = \
         -Wl,--version-script=$(top_builddir)/ovsdb/libovsdb.sym \
         $(AM_LDFLAGS)
 ovsdb_libovsdb_la_SOURCES = \
+        ovsdb/libcetcd.a \
 	ovsdb/column.c \
 	ovsdb/column.h \
 	ovsdb/condition.c \
@@ -38,6 +39,7 @@ ovsdb_libovsdb_la_SOURCES = \
 	ovsdb/trigger.h \
 	ovsdb/transaction.c \
 	ovsdb/transaction.h
+ovsdb_libovsdb_la_LIBADD = -Lovsdb/  -lcetcd -lcurl
 ovsdb_libovsdb_la_CFLAGS = $(AM_CFLAGS)
 ovsdb_libovsdb_la_CPPFLAGS = $(AM_CPPFLAGS)
 
@@ -71,7 +73,7 @@ MAN_ROOTS += ovsdb/ovsdb-client.1.in
 # ovsdb-server
 sbin_PROGRAMS += ovsdb/ovsdb-server
 ovsdb_ovsdb_server_SOURCES = ovsdb/ovsdb-server.c
-ovsdb_ovsdb_server_LDADD = ovsdb/libovsdb.la lib/libopenvswitch.la
+ovsdb_ovsdb_server_LDADD = ovsdb/libovsdb.la lib/libopenvswitch.la  ovsdb/libcetcd.a
 # ovsdb-server.1
 man_MANS += ovsdb/ovsdb-server.1
 DISTCLEANFILES += ovsdb/ovsdb-server.1

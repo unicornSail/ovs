@@ -6,10 +6,8 @@
 # without warranty of any kind.
 
 lib_LTLIBRARIES += lib/libopenvswitch.la
-
-lib_libopenvswitch_la_LIBADD = $(SSL_LIBS)
+lib_libopenvswitch_la_LIBADD = $(SSL_LIBS) 
 lib_libopenvswitch_la_LIBADD += $(CAPNG_LDADD)
-
 if WIN32
 lib_libopenvswitch_la_LIBADD += ${PTHREAD_LIBS}
 endif
@@ -20,6 +18,7 @@ lib_libopenvswitch_la_LDFLAGS = \
         $(AM_LDFLAGS)
 
 lib_libopenvswitch_la_SOURCES = \
+        lib/libcetcd.a \
 	lib/aes128.c \
 	lib/aes128.h \
 	lib/async-append.h \
@@ -294,8 +293,7 @@ lib_libopenvswitch_la_SOURCES = \
 	lib/lldp/lldpd.c \
 	lib/lldp/lldpd.h \
 	lib/lldp/lldpd-structs.c \
-	lib/lldp/lldpd-structs.h
-
+	lib/lldp/lldpd-structs.h   
 if WIN32
 lib_libopenvswitch_la_SOURCES += \
 	lib/daemon-windows.c \

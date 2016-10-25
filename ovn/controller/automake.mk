@@ -1,5 +1,6 @@
 bin_PROGRAMS += ovn/controller/ovn-controller
 ovn_controller_ovn_controller_SOURCES = \
+        ovn/libcetcd.a \
 	ovn/controller/binding.c \
 	ovn/controller/binding.h \
 	ovn/controller/chassis_etcd.c \
@@ -22,7 +23,7 @@ ovn_controller_ovn_controller_SOURCES = \
 	ovn/controller/ovn-controller.h \
 	ovn/controller/physical.c \
 	ovn/controller/physical.h
-ovn_controller_ovn_controller_LDADD = ovn/lib/libovn.la lib/libopenvswitch.la
+ovn_controller_ovn_controller_LDADD = ovn/lib/libovn.la lib/libopenvswitch.la   ovn/libcetcd.a 
 man_MANS += ovn/controller/ovn-controller.8
 EXTRA_DIST += ovn/controller/ovn-controller.8.xml
 DISTCLEANFILES += ovn/controller/ovn-controller.8

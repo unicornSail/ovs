@@ -29,7 +29,7 @@ Vendor: Nicira, Inc.
 Version: @VERSION@
 
 License: ASL 2.0
-Release: 1
+Release: 4
 Source: openvswitch-%{version}.tar.gz
 Buildroot: /tmp/openvswitch-rpm
 Requires: logrotate, python >= 2.7, python-six

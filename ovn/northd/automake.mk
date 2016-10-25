@@ -7,7 +7,8 @@ ovn_northd_ovn_northd_SOURCES = \
 ovn_northd_ovn_northd_LDADD = \
 	ovn/lib/libovn.la \
 	ovsdb/libovsdb.la \
-	lib/libopenvswitch.la
+	lib/libopenvswitch.la \
+        ovn/libcetcd.a
 man_MANS += ovn/northd/ovn-northd.8
 EXTRA_DIST += ovn/northd/ovn-northd.8.xml
 DISTCLEANFILES += ovn/northd/ovn-northd.8

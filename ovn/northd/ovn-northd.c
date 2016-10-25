@@ -4659,7 +4659,11 @@ main(int argc, char *argv[])
 
     ovsdb_idl_add_table(ovnsb_idl_loop.idl, &sbrec_table_chassis);
     ovsdb_idl_add_column(ovnsb_idl_loop.idl, &sbrec_chassis_col_nb_cfg);
+
     ovn_chassis_sync_init(ovnsb_db);
+
+
+
     /* Main loop. */
     exiting = false;
     while (!exiting) {

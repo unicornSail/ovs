@@ -57,7 +57,7 @@ AC_DEFUN([AX_CHECK_OPENSSL], [
                 if test $? = 0; then
                     SSL_LIBS=`$PKG_CONFIG openssl --libs-only-l 2>/dev/null`
                     SSL_INCLUDES=`$PKG_CONFIG openssl --cflags-only-I 2>/dev/null`
-                    found=true
+                   found=true
                 fi
             fi
 
@@ -103,7 +103,7 @@ AC_DEFUN([AX_CHECK_OPENSSL], [
     echo "Trying link with SSL_LDFLAGS=$SSL_LDFLAGS;" \
         "SSL_LIBS=$SSL_LIBS; SSL_INCLUDES=$SSL_INCLUDES" >&AS_MESSAGE_LOG_FD
 
-    save_LIBS="$LIBS -lcetcd"
+    save_LIBS="$LIBS -lcurl"
     save_LDFLAGS="$LDFLAGS"
     save_CPPFLAGS="$CPPFLAGS"
     LDFLAGS="$LDFLAGS $SSL_LDFLAGS"
