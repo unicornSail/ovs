@@ -25,6 +25,7 @@
 
 #include "binding.h"
 #include "chassis.h"
+#include "chassis_etcd.h"
 #include "command-line.h"
 #include "compiler.h"
 #include "daemon.h"
@@ -430,6 +431,7 @@ main(int argc, char *argv[])
     ofctrl_init(&group_table);
     pinctrl_init();
     lflow_init();
+    chassis_etcd_init();
 
     /* Connect to OVS OVSDB instance.  We do not monitor all tables by
      * default, so modules must register their interest explicitly.  */
@@ -512,9 +514,9 @@ main(int argc, char *argv[])
         const struct ovsrec_bridge *br_int = get_br_int(&ctx);
         const char *chassis_id = get_chassis_id(ctx.ovs_idl);
 
-        const struct sbrec_chassis *chassis = NULL;
+        bool chassis = false;
         if (chassis_id) {
-            chassis = chassis_run(&ctx, chassis_id, br_int);
+            chassis = chassis_etcd_run(&ctx, chassis_id, br_int);
             encaps_run(&ctx, br_int, chassis_id);
             binding_run(&ctx, br_int, chassis_id, &local_datapaths,
                         &all_lports);
@@ -550,12 +552,6 @@ main(int argc, char *argv[])
                 ofctrl_put(&flow_table, &pending_ct_zones,
                            get_nb_cfg(ctx.ovnsb_idl));
                 hmap_destroy(&flow_table);
-                if (ctx.ovnsb_idl_txn) {
-                    int64_t cur_cfg = ofctrl_get_cur_cfg();
-                    if (cur_cfg && cur_cfg != chassis->nb_cfg) {
-                        sbrec_chassis_set_nb_cfg(chassis, cur_cfg);
-                    }
-                }
             }
             mcgroup_index_destroy(&mcgroups);
             lport_index_destroy(&lports);
@@ -637,6 +633,8 @@ main(int argc, char *argv[])
         ovsdb_idl_loop_commit_and_wait(&ovs_idl_loop);
         poll_block();
     }
+
+    chassis_etcd_fini();
 
     unixctl_server_destroy(unixctl);
     lflow_destroy();

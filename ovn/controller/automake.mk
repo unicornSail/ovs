@@ -2,6 +2,8 @@ bin_PROGRAMS += ovn/controller/ovn-controller
 ovn_controller_ovn_controller_SOURCES = \
 	ovn/controller/binding.c \
 	ovn/controller/binding.h \
+	ovn/controller/chassis_etcd.c \
+	ovn/controller/chassis_etcd.h \
 	ovn/controller/chassis.c \
 	ovn/controller/chassis.h \
 	ovn/controller/encaps.c \
