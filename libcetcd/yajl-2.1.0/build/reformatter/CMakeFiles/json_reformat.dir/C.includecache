@@ -1,0 +1,36 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/controller/cetcd-6db806bd18f8ada6bb7fb775a2f1116450d08f36/third-party/yajl-2.1.0/reformatter/json_reformat.c
+yajl/yajl_parse.h
+-
+yajl/yajl_gen.h
+-
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+
+reformatter/../yajl-2.1.0/include/yajl/yajl_common.h
+stddef.h
+-
+
+reformatter/../yajl-2.1.0/include/yajl/yajl_gen.h
+yajl/yajl_common.h
+-
+stddef.h
+-
+
+reformatter/../yajl-2.1.0/include/yajl/yajl_parse.h
+yajl/yajl_common.h
+-
+stddef.h
+-
+

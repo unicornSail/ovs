@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/controller/cetcd-6db806bd18f8ada6bb7fb775a2f1116450d08f36/third-party/yajl-2.1.0/perf/documents.c
+documents.h
+/home/controller/cetcd-6db806bd18f8ada6bb7fb775a2f1116450d08f36/third-party/yajl-2.1.0/perf/documents.h
+stdlib.h
+-
+string.h
+-
+
+/home/controller/cetcd-6db806bd18f8ada6bb7fb775a2f1116450d08f36/third-party/yajl-2.1.0/perf/documents.h
+
+/home/controller/cetcd-6db806bd18f8ada6bb7fb775a2f1116450d08f36/third-party/yajl-2.1.0/perf/perftest.c
+yajl/yajl_parse.h
+-
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+documents.h
+/home/controller/cetcd-6db806bd18f8ada6bb7fb775a2f1116450d08f36/third-party/yajl-2.1.0/perf/documents.h
+sys/time.h
+-
+windows.h
+-
+
+perf/../yajl-2.1.0/include/yajl/yajl_common.h
+stddef.h
+-
+
+perf/../yajl-2.1.0/include/yajl/yajl_parse.h
+yajl/yajl_common.h
+-
+stddef.h
+-
+
