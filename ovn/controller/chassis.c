@@ -66,6 +66,13 @@ get_bridge_mappings(const struct smap *ext_ids)
     return smap_get_def(ext_ids, "ovn-bridge-mappings", "");
 }
 
+static const char *
+get_chassis_types(const struct smap *ext_ids)
+{
+    return smap_get_def(ext_ids, "ovn-chassis-types", "");
+}
+
+
 /* Returns this chassis's Chassis record, if it is available and is currently
  * amenable to a transaction. */
 const struct sbrec_chassis *
@@ -119,6 +126,7 @@ chassis_run(struct controller_ctx *ctx, const char *chassis_id,
     const char *bridge_mappings = get_bridge_mappings(&cfg->external_ids);
     const char *datapath_type =
         br_int && br_int->datapath_type ? br_int->datapath_type : "";
+    const char *chassis_types = get_chassis_types(&cfg->external_ids);
 
     struct ds iface_types = DS_EMPTY_INITIALIZER;
     ds_put_cstr(&iface_types, "");
@@ -143,16 +151,20 @@ chassis_run(struct controller_ctx *ctx, const char *chassis_id,
             = smap_get_def(&chassis_rec->external_ids, "datapath-type", "");
         const char *chassis_iface_types
             = smap_get_def(&chassis_rec->external_ids, "iface-types", "");
+        const char *chassis_chassis_types
+            = smap_get_def(&chassis_rec->external_ids, "ovn-chassis-types", "");
 
         /* If any of the external-ids should change, update them. */
         if (strcmp(bridge_mappings, chassis_bridge_mappings) ||
             strcmp(datapath_type, chassis_datapath_type) ||
-            strcmp(iface_types_str, chassis_iface_types)) {
+            strcmp(iface_types_str, chassis_iface_types) ||
+            strcmp(chassis_types, chassis_chassis_types)) {
             struct smap new_ids;
             smap_clone(&new_ids, &chassis_rec->external_ids);
             smap_replace(&new_ids, "ovn-bridge-mappings", bridge_mappings);
             smap_replace(&new_ids, "datapath-type", datapath_type);
             smap_replace(&new_ids, "iface-types", iface_types_str);
+            smap_replace(&new_ids, "ovn-chassis-types", chassis_types);
             sbrec_chassis_verify_external_ids(chassis_rec);
             sbrec_chassis_set_external_ids(chassis_rec, &new_ids);
             smap_destroy(&new_ids);
@@ -201,6 +213,7 @@ chassis_run(struct controller_ctx *ctx, const char *chassis_id,
         smap_add(&ext_ids, "ovn-bridge-mappings", bridge_mappings);
         smap_add(&ext_ids, "datapath-type", datapath_type);
         smap_add(&ext_ids, "iface-types", iface_types_str);
+        smap_add(&ext_ids, "ovn-chassis-types", chassis_types);
         chassis_rec = sbrec_chassis_insert(ctx->ovnsb_idl_txn);
         sbrec_chassis_set_name(chassis_rec, chassis_id);
         sbrec_chassis_set_hostname(chassis_rec, hostname);
