@@ -52,7 +52,7 @@ start_ovsdb () {
 
         set ovsdb-server
 
-        set "$@" --detach --monitor $OVN_NB_LOG --log-file=$OVN_NB_LOGFILE --remote=punix:$DB_NB_SOCK --remote=ptcp:$DB_NB_PORT:$DB_NB_ADDR --pidfile=$DB_NB_PID --unixctl=ovnnb_db.ctl
+        set "$@" --detach --monitor $OVN_NB_LOG --log-file=$OVN_NB_LOGFILE --remote=punix:$DB_NB_SOCK --remote=ptcp:$DB_NB_PORT:$DB_NB_ADDR --local-domain=tcp:$DB_NB_ADDR:$DB_NB_PORT --pidfile=$DB_NB_PID --unixctl=ovnnb_db.ctl
 
         $@ $DB_NB_FILE
         ovn-nbctl init
