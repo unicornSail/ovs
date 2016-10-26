@@ -154,6 +154,20 @@
         value mapping two physical network names to two ovs bridges would be:
         <code>physnet1:br-eth0,physnet2:br-eth1</code>.
       </dd>
+
+      <dt><code>external_ids:ovn-chassis-types</code></dt>
+      <dd>
+      	<p>
+          A comma-separated list. Supported chassis types are 
+          <code>gateway_router</code>.
+        </p>
+        <p>
+          This value is populated in <ref key="ovn-chassis-types" table="Chassis"
+          column="external_ids" db="OVN_Southbound"/> of the
+          <ref table="Chassis" db="OVN_Southbound"/> table in the OVN_Southbound
+          database.
+        </p>
+      </dd>
     </dl>
 
     <p>
