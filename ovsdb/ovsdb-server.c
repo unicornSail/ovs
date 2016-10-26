@@ -56,6 +56,7 @@
 #include "util.h"
 #include "unixctl.h"
 #include "perf-counter.h"
+#include "elect.h"
 #include "openvswitch/vlog.h"
 
 VLOG_DEFINE_THIS_MODULE(ovsdb_server);
@@ -113,7 +114,7 @@ static void close_db(struct db *db);
 static void parse_options(int *argc, char **argvp[],
                           struct sset *remotes, char **unixctl_pathp,
                           char **run_command, char **sync_from,
-                          char **sync_exclude, bool *is_backup);
+                          char **sync_exclude, bool *is_backup, char **local_domain);
 OVS_NO_RETURN static void usage(void);
 
 static char *reconfigure_remotes(struct ovsdb_jsonrpc_server *,
@@ -255,6 +256,7 @@ main(int argc, char *argv[])
     struct ovsdb_jsonrpc_server *jsonrpc;
     struct sset remotes, db_filenames;
     char *sync_from, *sync_exclude;
+    char *local_domain = NULL;
     bool is_backup;
     const char *db_filename;
     struct process *run_process;
@@ -275,7 +277,7 @@ main(int argc, char *argv[])
 
     bool active = false;
     parse_options(&argc, &argv, &remotes, &unixctl_path, &run_command,
-                  &sync_from, &sync_exclude, &active);
+                  &sync_from, &sync_exclude, &active, &local_domain);
     is_backup = sync_from && !active;
 
     daemon_become_new_user(false);
@@ -313,6 +315,10 @@ main(int argc, char *argv[])
     load_config(config_tmpfile, &remotes, &db_filenames, &sync_from,
                 &sync_exclude, &is_backup);
 
+    if (local_domain) {
+        ovsdb_elect_init(local_domain, &sync_from, &is_backup);
+    }
+
     /* Start ovsdb jsonrpc server. When running as a backup server,
      * jsonrpc connections are read only. Otherwise, both read
      * and write transactions are allowed.  */
@@ -345,6 +351,10 @@ main(int argc, char *argv[])
     retval = unixctl_server_create(unixctl_path, &unixctl);
     if (retval) {
         exit(EXIT_FAILURE);
+    }
+
+    if (local_domain) {
+        ovsdb_elect_init_unixctl_client(unixctl_path);
     }
 
     if (run_command) {
@@ -442,6 +452,10 @@ main(int argc, char *argv[])
     free(sync_exclude);
     unixctl_server_destroy(unixctl);
     replication_destroy();
+
+    if (local_domain) {
+        ovsdb_elect_fini();
+    }
 
     if (run_process && process_exited(run_process)) {
         int status = process_status(run_process);
@@ -1490,7 +1504,7 @@ ovsdb_server_get_sync_status(struct unixctl_conn *conn, int argc OVS_UNUSED,
 static void
 parse_options(int *argcp, char **argvp[],
               struct sset *remotes, char **unixctl_pathp, char **run_command,
-              char **sync_from, char **sync_exclude, bool *active)
+              char **sync_from, char **sync_exclude, bool *active, char **local_domain)
 {
     enum {
         OPT_REMOTE = UCHAR_MAX + 1,
@@ -1501,6 +1515,7 @@ parse_options(int *argcp, char **argvp[],
         OPT_SYNC_FROM,
         OPT_SYNC_EXCLUDE,
         OPT_ACTIVE,
+        OPT_LOCAL_DOMAIN,
         VLOG_OPTION_ENUMS,
         DAEMON_OPTION_ENUMS
     };
@@ -1522,6 +1537,7 @@ parse_options(int *argcp, char **argvp[],
         {"sync-from",   required_argument, NULL, OPT_SYNC_FROM},
         {"sync-exclude-tables", required_argument, NULL, OPT_SYNC_EXCLUDE},
         {"active", no_argument, NULL, OPT_ACTIVE},
+        {"local-domain", required_argument, NULL, OPT_LOCAL_DOMAIN},
         {NULL, 0, NULL, 0},
     };
     char *short_options = ovs_cmdl_long_options_to_short_options(long_options);
@@ -1599,6 +1615,11 @@ parse_options(int *argcp, char **argvp[],
         case OPT_ACTIVE:
             *active = true;
             break;
+
+        case OPT_LOCAL_DOMAIN:
+            *local_domain = xstrdup(optarg);
+            break;
+
 
         case '?':
             exit(EXIT_FAILURE);
