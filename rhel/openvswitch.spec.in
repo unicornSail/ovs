@@ -98,11 +98,7 @@ rm \
     $RPM_BUILD_ROOT/usr/share/man/man8/ovs-test.8 \
     $RPM_BUILD_ROOT/usr/share/man/man8/ovs-l3ping.8 \
     $RPM_BUILD_ROOT/usr/sbin/ovs-vlan-bug-workaround \
-    $RPM_BUILD_ROOT/usr/share/man/man8/ovs-vlan-bug-workaround.8 \
-    $RPM_BUILD_ROOT/usr/bin/ovn-* \
-    $RPM_BUILD_ROOT/usr/share/man/man?/ovn-* \
-    $RPM_BUILD_ROOT/usr/share/openvswitch/ovn-* \
-    $RPM_BUILD_ROOT/usr/share/openvswitch/scripts/ovn-*
+    $RPM_BUILD_ROOT/usr/share/man/man8/ovs-vlan-bug-workaround.8
 (cd "$RPM_BUILD_ROOT" && rm -rf usr/%{_lib}/*.la)
 (cd "$RPM_BUILD_ROOT" && rm -rf usr/include)
 
@@ -197,6 +193,14 @@ exit 0
 %config(noreplace) /etc/logrotate.d/openvswitch
 /etc/sysconfig/network-scripts/ifup-ovs
 /etc/sysconfig/network-scripts/ifdown-ovs
+/usr/bin/ovn-controller
+/usr/bin/ovn-controller-vtep
+/usr/bin/ovn-docker-overlay-driver
+/usr/bin/ovn-docker-underlay-driver
+/usr/bin/ovn-nbctl
+/usr/bin/ovn-northd
+/usr/bin/ovn-sbctl
+/usr/bin/ovn-trace
 /usr/bin/ovs-appctl
 /usr/bin/ovs-dpctl
 /usr/bin/ovs-dpctl-top
@@ -221,8 +225,18 @@ exit 0
 /usr/share/man/man1/ovsdb-client.1.gz
 /usr/share/man/man1/ovsdb-server.1.gz
 /usr/share/man/man1/ovsdb-tool.1.gz
+/usr/share/man/man5/ovn-nb.5.gz
+/usr/share/man/man5/ovn-sb.5.gz
 /usr/share/man/man5/ovs-vswitchd.conf.db.5.gz
 /usr/share/man/man5/vtep.5.gz
+/usr/share/man/man7/ovn-architecture.7.gz
+/usr/share/man/man8/ovn-controller.8.gz
+/usr/share/man/man8/ovn-controller-vtep.8.gz
+/usr/share/man/man8/ovn-ctl.8.gz
+/usr/share/man/man8/ovn-nbctl.8.gz
+/usr/share/man/man8/ovn-northd.8.gz
+/usr/share/man/man8/ovn-sbctl.8.gz
+/usr/share/man/man8/ovn-trace.8.gz
 /usr/share/man/man8/ovs-appctl.8.gz
 /usr/share/man/man8/ovs-bugtool.8.gz
 /usr/share/man/man8/ovs-ctl.8.gz
@@ -238,6 +252,10 @@ exit 0
 /usr/share/man/man8/vtep-ctl.8.gz
 /usr/share/openvswitch/bugtool-plugins/
 /usr/share/openvswitch/python/
+/usr/share/openvswitch/scripts/ovn-bugtool-nbctl-show
+/usr/share/openvswitch/scripts/ovn-bugtool-sbctl-lflow-list
+/usr/share/openvswitch/scripts/ovn-bugtool-sbctl-show
+/usr/share/openvswitch/scripts/ovn-ctl
 /usr/share/openvswitch/scripts/ovs-bugtool-*
 /usr/share/openvswitch/scripts/ovs-check-dead-ifs
 /usr/share/openvswitch/scripts/ovs-ctl
@@ -245,6 +263,8 @@ exit 0
 /usr/share/openvswitch/scripts/ovs-save
 /usr/share/openvswitch/scripts/ovs-vtep
 /usr/share/openvswitch/scripts/sysconfig.template
+/usr/share/openvswitch/ovn-nb.ovsschema
+/usr/share/openvswitch/ovn-sb.ovsschema
 /usr/share/openvswitch/vswitch.ovsschema
 /usr/share/openvswitch/vtep.ovsschema
 %doc COPYING DESIGN.md INSTALL.SSL.md NOTICE README.md WHY-OVS.md FAQ.md NEWS
