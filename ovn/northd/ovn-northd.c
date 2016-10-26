@@ -41,6 +41,7 @@
 #include "unixctl.h"
 #include "util.h"
 #include "uuid.h"
+#include "chassis_sync.h"
 #include "openvswitch/vlog.h"
 
 VLOG_DEFINE_THIS_MODULE(ovn_northd);
@@ -4658,7 +4659,7 @@ main(int argc, char *argv[])
 
     ovsdb_idl_add_table(ovnsb_idl_loop.idl, &sbrec_table_chassis);
     ovsdb_idl_add_column(ovnsb_idl_loop.idl, &sbrec_chassis_col_nb_cfg);
-
+    ovn_chassis_sync_init(ovnsb_db);
     /* Main loop. */
     exiting = false;
     while (!exiting) {
@@ -4689,7 +4690,7 @@ main(int argc, char *argv[])
             exiting = true;
         }
     }
-
+    ovn_chassis_sync_fini();
     unixctl_server_destroy(unixctl);
     ovsdb_idl_loop_destroy(&ovnnb_idl_loop);
     ovsdb_idl_loop_destroy(&ovnsb_idl_loop);
